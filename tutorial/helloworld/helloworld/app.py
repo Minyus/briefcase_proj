@@ -1,92 +1,62 @@
-#!/usr/bin/env python
-
-import os
-
 import toga
 from toga.style import Pack
-from toga.constants import COLUMN
+from toga.style.pack import COLUMN, ROW, LEFT, RIGHT
 
 
-class TogaDemo(toga.App):
+class Converter(toga.App):
+    def calculate(self, widget):
+        try:
+            self.c_input.value = (float(self.f_input.value) - 32.0) * 5.0 / 9.0
+        except Exception:
+            self.c_input.value = '???'
 
     def startup(self):
-        # Create the main window
-        self.main_window = toga.MainWindow(self.name)
+        # Create a main window with a name matching the app
+        self.main_window = toga.MainWindow(title=self.name)
 
-        left_container = toga.OptionContainer()
+        # Create a main content box
+        f_box = toga.Box()
+        c_box = toga.Box()
+        box = toga.Box()
 
-        left_table = toga.Table(
-            headings=['Hello', 'World'],
-            data=[
-                ('root1', 'value1'),
-                ('root2', 'value2'),
-                ('root3', 'value3'),
-                ('root4', 'value4'),
-            ]
-        )
+        self.c_input = toga.TextInput(readonly=True)
+        self.f_input = toga.TextInput()
 
-        left_tree = toga.Tree(
-            headings=['Navigate'],
-            data={
-                ('root1',): {
-                },
-                ('root2',): {
-                    ('root2.1',): None,
-                    ('root2.2',): [
-                        ('root2.2.1',),
-                        ('root2.2.2',),
-                        ('root2.2.3',),
-                    ]
-                }
-            }
-        )
+        self.c_label = toga.Label('Celsius', style=Pack(text_align=LEFT))
+        self.f_label = toga.Label('Fahrenheit', style=Pack(text_align=LEFT))
+        self.join_label = toga.Label('Is equivalent to', style=Pack(text_align=RIGHT))
 
-        left_container.add('Table', left_table)
-        left_container.add('Tree', left_tree)
+        button = toga.Button('Calculate', on_press=self.calculate)
 
-        right_content = toga.Box(style=Pack(direction=COLUMN))
-        for b in range(0, 10):
-            right_content.add(
-                toga.Button(
-                    'Hello world %s' % b,
-                    on_press=self.button_handler,
-                    style=Pack(padding=20)
-                )
-            )
+        f_box.add(self.f_input)
+        f_box.add(self.f_label)
 
-        right_container = toga.ScrollContainer()
+        c_box.add(self.join_label)
+        c_box.add(self.c_input)
+        c_box.add(self.c_label)
 
-        right_container.content = right_content
+        box.add(f_box)
+        box.add(c_box)
+        box.add(button)
 
-        split = toga.SplitContainer()
+        box.style.update(direction=COLUMN, padding_top=10)
+        f_box.style.update(direction=ROW, padding=5)
+        c_box.style.update(direction=ROW, padding=5)
 
-        split.content = [left_container, right_container]
+        self.c_input.style.update(flex=1)
+        self.f_input.style.update(flex=1, padding_left=160)
+        self.c_label.style.update(width=100, padding_left=10)
+        self.f_label.style.update(width=100, padding_left=10)
+        self.join_label.style.update(width=150, padding_right=10)
 
-        cmd1 = toga.Command(self.action1, 'Action 1', tooltip='Perform action 1', icon=os.path.join(os.path.dirname(__file__), 'icons/brutus-32.png'))
-        cmd2 = toga.Command(self.action2, 'Action 2', tooltip='Perform action 2', icon=toga.Icon.TIBERIUS_ICON)
+        button.style.update(padding=15, flex=1)
 
-        self.main_window.toolbar.add(cmd1, cmd2)
-
-        self.main_window.content = split
+        # Add the content on the main window
+        self.main_window.content = box
 
         # Show the main window
         self.main_window.show()
 
-    def button_handler(self, widget):
-        print("button press")
-        for i in range(0, 10):
-            yield 1
-            print ('still running... (iteration %s)' % i)
-
-    def action1(self, widget):
-        self.main_window.info_dialog('Toga', 'THIS! IS! TOGA!!')
-
-    def action2(self, widget):
-        if self.main_window.question_dialog('Toga', 'Is this cool or what?'):
-            self.main_window.info_dialog('Happiness', 'I know, right! :-)')
-        else:
-            self.main_window.info_dialog('Shucks...', "Well aren't you a spoilsport... :-(")
-
 
 def main():
-    return TogaDemo('Toga Demo', 'org.beeware.toga-demo')
+    return Converter('Converter', 'org.pybee.converter')
