@@ -140,7 +140,7 @@ setup(
         # Desktop/laptop deployments
         'macos': {
             'app_requires': [
-                'toga-cocoa==0.3.0.dev11',
+                'toga-cocoa==0.3.0.dev14',
             ]
         },
         'linux': {
@@ -150,26 +150,26 @@ setup(
         },
         'windows': {
             'app_requires': [
-                'toga-winforms==0.3.0.dev11',
+                'toga-winforms==0.3.0.dev14',
             ]
         },
 
         # Mobile deployments
         'ios': {
             'app_requires': [
-                'toga-ios==0.3.0.dev11',
+                'toga-ios==0.3.0.dev14',
             ]
         },
         'android': {
             'app_requires': [
-                'toga-android==0.3.0.dev11',
+                'toga-android==0.3.0.dev14',
             ]
         },
 
         # Web deployments
         'django': {
             'app_requires': [
-                'toga-django==0.3.0.dev11',
+                'toga-django==0.3.0.dev14',
             ]
         },
     }
